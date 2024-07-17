@@ -9,6 +9,10 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.listen(process.env.PORT || 3500)
 
+app.get("/", (req, res) => {
+	res.send("FFlag Discord Bot is online")
+})
+
 const fs = require('fs')
 const path = require('path')
 const client = new Discord.Client({ intents: [Discord.GatewayIntentBits.Guilds, Discord.GatewayIntentBits.MessageContent] })
