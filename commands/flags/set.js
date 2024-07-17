@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const api = require("../../configuration/api.json")
 const axios = require("axios");
 const { EmbedBuilder } = require('@discordjs/builders');
+const logs = require("../../configuration/logs.json") 
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -22,10 +23,21 @@ module.exports = {
 
 		axios.post(`${api.url}/api/set`, {
             flag, value
-        }).then(response => {
+        }).then(async response => {
             interaction.editReply({ content: "Flag value has been changed successfully!", ephemeral: true })
+            if(logs.logFlagChanges){
+                const channel = await interaction.client.channels.cache.find(id => id.id == logs.channelID)
+                if(channel){
+                    channel.send(`🚩 A flag has been changed\n\nChanged by <@${interaction.user.id}>\nFlags changed:\n\`\`\`\n${flag}: ${typeof response.data.old == "boolean" ? (response.data.old == true ? "✅" : "❌") : response.data.old} -> ${typeof value == "boolean" ? (value == true ? "✅" : "❌") : value}\`\`\``)
+                }
+            }
         }).catch(e => {
-            interaction.editReply({ content: `There was an error setting your flag value: ${e.response.data.message}`, ephemeral: true })
+            try {
+                interaction.editReply({ content: `There was an error setting your flag value: ${e.response.data.message}`, ephemeral: true })
+            } catch(err) {
+                console.log(e, err)
+                interaction.editReply({ content: "ERR_UNHANDLED_CONTACT_DEV "})
+            }
         })
 	},
 };
