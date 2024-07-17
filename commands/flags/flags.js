@@ -16,7 +16,9 @@ module.exports = {
         
         const Embed = new EmbedBuilder()
         .setTitle("Flags")
-        .setDescription((await Promise.all(description)).join("\n"))
+        var desc = (await Promise.all(description)).join("\n")
+        if(desc == '') desc = "*No flags to display*"
+        Embed.setDescription(desc)
 
         interaction.reply({ content: "Here are the flags!", embeds: [Embed] })
 	},

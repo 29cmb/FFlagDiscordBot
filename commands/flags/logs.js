@@ -17,7 +17,9 @@ module.exports = {
         
         const Embed = new EmbedBuilder()
         .setTitle("Logs")
-        .setDescription((await Promise.all(description)).join("\n"))
+        var desc = (await Promise.all(description)).join("\n")
+        if(desc == '') desc = "*No logs to display*"
+        Embed.setDescription(desc)
 
         interaction.reply({ content: "Here are the logs!", embeds: [Embed] })
 	},
