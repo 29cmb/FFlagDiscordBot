@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const api = require("../../configuration/api.json")
 const axios = require("axios");
 const { EmbedBuilder } = require('@discordjs/builders');
-
+const logs = require('../../configuration/logs.json');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('create')
@@ -22,8 +22,14 @@ module.exports = {
 
 		axios.post(`${api.url}/api/create`, {
             flag, value
-        }).then(response => {
+        }).then(async response => {
             interaction.editReply({ content: "Flag created successfully!", ephemeral: true })
+            if(logs.logFlagChanges){
+                const channel = await interaction.client.channels.cache.find(id => id.id == logs.channelID)
+                if(channel){
+                    channel.send(`🚩 A flag has been changed\n\nChanged by <@${interaction.user.id}>\nFlags changed:\n\`\`\`\n${flag}: None -> ${typeof value == "boolean" ? (value == true ? "✅" : "❌") : value} (Created)\n\`\`\``)
+                }
+            }
         }).catch(e => {
             interaction.editReply({ content: `There was an error making your flag: ${e.response.data.message}`, ephemeral: true })
         })
