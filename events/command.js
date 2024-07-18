@@ -12,6 +12,12 @@ module.exports = {
 			return;
 		}
 
+		if(command.permissions){
+			if(!interaction.member.permissions.has(command.permissions)){
+				await interaction.reply({ content: 'You do not have permission to execute this command!', ephemeral: true });
+			}
+		}
+
 		try {
 			await command.execute(interaction);
 		} catch (error) {

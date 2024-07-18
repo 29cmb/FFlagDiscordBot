@@ -7,7 +7,7 @@ const app = express()
 
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
-app.listen(process.env.PORT || 3500)
+app.listen(process.env.PORT || 9450)
 
 app.get("/", (req, res) => {
 	res.send("FFlag Discord Bot is online")

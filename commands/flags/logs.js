@@ -1,12 +1,12 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const api = require("../../configuration/api.json")
 const axios = require("axios");
-const { EmbedBuilder } = require('@discordjs/builders');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('logs')
 		.setDescription('Get a list of the logs'),
+    permissions: [PermissionsBitField.Flags.ManageMessages],
 	async execute(interaction) {
 		const response = await axios.get(`${api.url}/api/logs`)
         const data = response.data.data

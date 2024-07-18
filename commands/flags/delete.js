@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionsBitField } = require('discord.js');
 const api = require("../../configuration/api.json")
 const axios = require("axios");
 const { EmbedBuilder } = require('@discordjs/builders');
@@ -11,6 +11,7 @@ module.exports = {
         .addStringOption(o => 
             o.setName("name").setDescription("Flag to delete").setRequired(true)
         ),
+    permissions: [PermissionsBitField.Flags.ManageGuild],
 	async execute(interaction) {
         await interaction.deferReply()
         const flag = interaction.options.getString("name")
